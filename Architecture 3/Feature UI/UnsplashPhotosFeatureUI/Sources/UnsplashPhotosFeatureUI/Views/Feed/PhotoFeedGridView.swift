@@ -5,6 +5,7 @@
 //  Created on 09/10/2026.
 //
 
+import CoreFoundational
 import SwiftUI
 import CoreNetworking
 import UnsplashPhotosFeature
@@ -26,6 +27,7 @@ public struct PhotoFeedGridView: View {
         .background(Color.black)
         .task {
             await viewModel.loadFirstPageIfNeeded()
+            safePrint("Feed appeared")
         }
         .navigationDestination(for: FeedPhotoRoute.self) { route in
             photoDetail(forPhotoID: route.photoID)
@@ -41,7 +43,7 @@ public struct PhotoFeedGridView: View {
                 viewModel.dismissErrorMessage()
             }
         } message: {
-            Text(viewModel.errorMessage ?? .init())
+            Text(viewModel.errorMessage ?? .empty)
         }
     }
 }

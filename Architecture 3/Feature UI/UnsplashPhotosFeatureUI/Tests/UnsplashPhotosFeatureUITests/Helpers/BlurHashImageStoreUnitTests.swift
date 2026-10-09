@@ -5,7 +5,7 @@
 //  Created on 09/10/2026.
 //
 
-import CoreTestSupport
+import CoreTesting
 import Testing
 @testable import UnsplashPhotosFeatureUI
 

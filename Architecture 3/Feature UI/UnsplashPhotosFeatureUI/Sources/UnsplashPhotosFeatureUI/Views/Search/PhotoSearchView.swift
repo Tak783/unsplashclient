@@ -5,6 +5,7 @@
 //  Created on 09/10/2026.
 //
 
+import CoreFoundational
 import SwiftUI
 import CoreNetworking
 import UnsplashPhotosFeature
@@ -47,7 +48,7 @@ public struct PhotoSearchView: View {
                     viewModel.dismissErrorMessage()
                 }
             } message: {
-                Text(viewModel.errorMessage ?? .init())
+                Text(viewModel.errorMessage ?? .empty)
             }
     }
 }

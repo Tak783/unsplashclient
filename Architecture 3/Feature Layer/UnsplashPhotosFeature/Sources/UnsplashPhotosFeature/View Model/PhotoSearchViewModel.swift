@@ -5,6 +5,7 @@
 //  Created on 09/10/2026.
 //
 
+import CoreFoundational
 import Foundation
 import CoreNetworking
 
@@ -24,13 +25,13 @@ public final class PhotoSearchViewModel {
     public var isLoadingNextPage = false
     public var errorMessage: String?
 
-    public var searchQuery = String() {
+    public var searchQuery = String.empty {
         didSet { searchQueryDidChange() }
     }
 
     public private(set) var hasSearched = false
 
-    private var activeQuery = String()
+    private var activeQuery = String.empty
     private var searchGeneration = 0
 
     private let photosService: PhotosService
@@ -89,13 +90,16 @@ public extension PhotoSearchViewModel {
         hasSearched = true
         resetPaging()
 
+        safePrint("Searching for \(query)")
+        
         await loadNextPage()
     }
 
     private func clearResults() {
         searchGeneration += 1
-        activeQuery = .init()
+        activeQuery = .empty
         hasSearched = false
         resetPaging()
+        safePrint("Search results cleared")
     }
 }

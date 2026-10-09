@@ -30,6 +30,13 @@
       </FileRef>
    </Group>
    <Group
+      location = "group:Testing Layer"
+      name = "Testing Layer">
+      <FileRef
+         location = "group:CoreTesting">
+      </FileRef>
+   </Group>
+   <Group
       location = "group:Presentation"
       name = "Presentation">
       <FileRef

@@ -5,6 +5,7 @@
 //  Created on 09/10/2026.
 //
 
+import CoreFoundational
 import CoreNetworking
 @MainActor
 public protocol PhotoFeedPaginating: PhotoFeedPresenting {
@@ -34,13 +35,17 @@ public extension PhotoFeedPaginating {
             isLoadingNextPage = false
         }
 
+        safePrint("Loading page \(nextPageNumber)")
+
         do {
             let loadedPhotos = try await loadPhotos(forPageNumber: nextPageNumber)
+            safePrint("Loaded \(loadedPhotos.count) photos for page \(nextPageNumber)")
             hasMorePagesToLoad = !loadedPhotos.isEmpty
             nextPageNumber += 1
             appendPhotosNotSeenBefore(loadedPhotos)
         } catch {
             guard !CancellationCheck.isCancellation(error) else { return }
+            safePrint("Page \(nextPageNumber) failed: \(error.localizedDescription)")
             errorMessage = PhotosServiceErrorMessage.userFacingMessage(for: error)
             isShowingErrorAlert = true
         }

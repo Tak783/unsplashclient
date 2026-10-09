@@ -1,6 +1,6 @@
 //
 //  MemoryLeakTracking.swift
-//  CoreTestSupport
+//  CoreTesting
 //
 //  Created on 09/10/2026.
 //

@@ -5,6 +5,7 @@
 //  Created on 09/10/2026.
 //
 
+import CoreFoundational
 import Kingfisher
 
 public enum PhotoImageCacheConfigurator {
@@ -12,5 +13,6 @@ public enum PhotoImageCacheConfigurator {
 
     public static func configure() {
         ImageCache.default.memoryStorage.config.totalCostLimit = memoryCacheLimitInBytes
+        safePrint("Image memory cache limit set to \(memoryCacheLimitInBytes) bytes")
     }
 }

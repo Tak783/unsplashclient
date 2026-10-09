@@ -11,20 +11,24 @@ let package = Package(
         .library(
             name: "CoreNetworking",
             targets: ["CoreNetworking"]
-        ),
-        .library(
-            name: "CoreTestSupport",
-            targets: ["CoreTestSupport"]
+        )
+    ],
+    dependencies: [
+        .package(
+            name: "CoreTesting",
+            path: "../../Testing Layer/CoreTesting"
         )
     ],
     targets: [
         .target(name: "CoreNetworking"),
-        .target(name: "CoreTestSupport"),
         .testTarget(
             name: "CoreNetworkingTests",
             dependencies: [
                 "CoreNetworking",
-                "CoreTestSupport"
+                .product(
+                    name: "CoreTesting",
+                    package: "CoreTesting"
+                )
             ]
         )
     ]
