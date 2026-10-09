@@ -111,23 +111,22 @@ extension PhotosFeedViewModel {
 
 // MARK: - Presentation Mapping
 extension PhotosFeedViewModel {
-    private static let missingCaptionPlaceholder = "Untitled photo"
-
     private func makePresentationModel(
         for photo: UnsplashPhotoModel
     ) -> PhotoFeedCellPresentationModel {
         PhotoFeedCellPresentationModel(
             id: photo.id,
-            caption: caption(for: photo),
+            caption: PhotoCaptionResolver.caption(for: photo),
             imageURL: photo.urls?.small,
             blurHash: photo.blurHash
         )
     }
+}
 
-    private func caption(for photo: UnsplashPhotoModel) -> String {
-        [photo.altDescription, photo.description]
-            .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
-            .first { !$0.isEmpty } ?? Self.missingCaptionPlaceholder
+// MARK: - Photo Lookup
+extension PhotosFeedViewModel {
+    func photo(withID photoID: String) -> UnsplashPhotoModel? {
+        photos.first { $0.id == photoID }
     }
 }
 

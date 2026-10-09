@@ -8,6 +8,7 @@
 import Foundation
 
 struct RemoteUnsplashPhotoImageURLsModel: Decodable {
+    let full: URL?
     let regular: URL?
     let small: URL?
     let thumb: URL?
@@ -17,6 +18,7 @@ struct RemoteUnsplashPhotoImageURLsModel: Decodable {
 extension RemoteUnsplashPhotoImageURLsModel {
     func toLocalModel() -> UnsplashPhotoImageURLsModel {
         UnsplashPhotoImageURLsModel(
+            full: full,
             regular: regular,
             small: small,
             thumb: thumb

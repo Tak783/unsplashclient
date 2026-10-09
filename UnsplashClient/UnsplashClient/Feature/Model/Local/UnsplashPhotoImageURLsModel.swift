@@ -8,6 +8,7 @@
 import Foundation
 
 struct UnsplashPhotoImageURLsModel: Sendable, Equatable {
+    let full: URL?
     let regular: URL?
     let small: URL?
     let thumb: URL?

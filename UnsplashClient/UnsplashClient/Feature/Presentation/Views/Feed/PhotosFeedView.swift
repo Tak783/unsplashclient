@@ -9,13 +9,15 @@ import SwiftUI
 
 struct PhotosFeedView: View {
     @State private var viewModel: PhotosFeedViewModel
+    @Namespace private var photoZoomNamespace
 
     init(viewModel: PhotosFeedViewModel) {
         _viewModel = State(initialValue: viewModel)
     }
 
     var body: some View {
-        GeometryReader { geometryProxy in
+        NavigationStack {
+            GeometryReader { geometryProxy in
             let cellWidth = cellWidth(
                 forParentViewWidth: geometryProxy.size.width
             )
@@ -28,12 +30,16 @@ struct PhotosFeedView: View {
                         Array(viewModel.photoCellPresentationModels.enumerated()),
                         id: \.element.id
                     ) { photoIndex, photo in
-                        PhotoFeedCell(
-                            cellWidth: cellWidth,
-                            cellHeight: cellHeight(forCellWidth: cellWidth),
-                            photo: photo
-                        )
-                        .equatable()
+                        NavigationLink(value: photo.id) {
+                            PhotoFeedCell(
+                                cellWidth: cellWidth,
+                                cellHeight: cellHeight(forCellWidth: cellWidth),
+                                photo: photo
+                            )
+                            .equatable()
+                        }
+                        .buttonStyle(.plain)
+                        .matchedTransitionSource(id: photo.id, in: photoZoomNamespace)
                         .onAppear {
                             viewModel.photoDidAppear(atIndex: photoIndex)
                         }
@@ -44,8 +50,18 @@ struct PhotosFeedView: View {
             .refreshable {
                 await viewModel.refresh()
             }
+            }
+            .background(Color.black)
+            .toolbar(.hidden, for: .navigationBar)
+            .navigationDestination(for: String.self) { photoID in
+                if let photo = viewModel.photo(withID: photoID) {
+                    PhotoDetailView(viewModel: PhotoDetailViewModel(photo: photo))
+                        .navigationTransition(
+                            .zoom(sourceID: photoID, in: photoZoomNamespace)
+                        )
+                }
+            }
         }
-        .background(Color.black)
         .task {
             await viewModel.loadFirstPageIfNeeded()
         }

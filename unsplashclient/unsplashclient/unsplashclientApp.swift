@@ -19,6 +19,7 @@ struct UnsplashClientApp: App {
     var body: some Scene {
         WindowGroup {
             PhotosFeedView(viewModel: Self.makePhotosFeedViewModel())
+                .preferredColorScheme(.dark)
         }
     }
 
