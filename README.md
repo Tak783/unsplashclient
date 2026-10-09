@@ -8,22 +8,21 @@ so the same brief can be read at three levels of structure.
 
 ## What each architecture has
 
-| | Architecture 1 | Architecture 2 | Architecture 3 |
-|---|:---:|:---:|:---:|
-| MVVM | 🟢 | 🟢 | 🟢 |
-| Coordinator free navigation with typed routes | 🟢 | 🟢 | 🟢 |
-| Paging shared through a protocol extension | 🟢 | 🟢 | 🟢 |
-| Service protocol seam | 🟢 | 🟢 | 🟢 |
-| Separate remote and local models | 🔴 | 🟢 | 🟢 |
-| View factories | 🔴 | 🟢 | 🟢 |
-| Unit tests | 🔴 | 🟢 | 🟢 |
-| Test spec protocols | 🔴 | 🔴 | 🟢 |
-| Memory leak tracking in tests | 🔴 | 🔴 | 🟢 |
-| Deprecated API kept to show the decision | 🔴 | 🔴 | 🟢 |
-| Split into Swift packages by layer | 🔴 | 🔴 | 🟢 |
-| Xcode workspace | 🔴 | 🔴 | 🟢 |
-| Shared design system package | 🔴 | 🔴 | 🟢 |
-| Platform agnostic layers below the app | 🔴 | 🔴 | 🟢 |
+| Feature                                       | Architecture 1 | Architecture 2 | Architecture 3 |
+|-----------------------------------------------|:--------------:|:--------------:|:--------------:|
+| MVVM                                          |       🟢       |       🟢       |       🟢       |
+| Protocol     |       🟢       |       🟢       |       🟢       |
+| Service protocol seam                         |       🟢       |       🟢       |       🟢       |
+| Separate remote and local models              |       🔴       |       🟢       |       🟢       |
+| View factories                                |       🔴       |       🟢       |       🟢       |
+| Unit tests                                    |       🔴       |       🟢       |       🟢       |
+| Test spec protocols                           |       🔴       |       🔴       |       🟢       |
+| Memory leak tracking in tests                 |       🔴       |       🔴       |       🟢       |
+| Deprecated API kept to show the decision      |       🔴       |       🔴       |       🟢       |
+| Split into Swift packages by layer            |       🔴       |       🔴       |       🟢       |
+| Xcode workspace                               |       🔴       |       🔴       |       🟢       |
+| Shared design system package                  |       🔴       |       🔴       |       🟢       |
+| Platform agnostic layers below the app        |       🔴       |       🔴       |       🟢       |
 
 Architecture 1 is the plainest reading of the brief. Architecture 2 adds the seams and the tests.
 Architecture 3 takes those same seams and makes them physical, so the compiler enforces them.
