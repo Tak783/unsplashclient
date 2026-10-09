@@ -2,6 +2,13 @@
 <Workspace
    version = "1.0">
    <Group
+      location = "group:Foundation Layer"
+      name = "Foundation Layer">
+      <FileRef
+         location = "group:CoreFoundational">
+      </FileRef>
+   </Group>
+   <Group
       location = "group:Core Layer"
       name = "Core Layer">
       <FileRef
