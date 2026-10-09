@@ -73,7 +73,7 @@ The diagram lives at `Architecture 3/architecture-diagram.html`. Open it in a br
   packages, so an import pointing the wrong way does not compile.
 
 
-## Layers
+## Layers explained
 
 All three architectures generally follow the layering below in principle. In Architecture 1 and
 Architecture 2 the layers are folders and conventions inside one target, so nothing stops a view
@@ -206,6 +206,107 @@ them again on termination. Nothing in the app needs to do that by hand.
 To clear manually, for example behind a settings toggle, the calls are
 `ImageCache.default.clearMemoryCache()`, `clearDiskCache()` and `cleanExpiredDiskCache()`. None of
 those are wired to anything today, because the app has no settings screen.
+
+
+## Choices, and what they cost
+
+The brief is graded on scrolling, responsiveness, loading states, behaviour after several hundred
+images, and avoiding duplicated or unnecessary work. These are the decisions made against that,
+and the reasoning behind each.
+
+### Which image size to request
+
+Measured rather than guessed. For the same photo:
+
+| URL | Bytes |
+|---|---:|
+| `small` | 24,526 |
+| A square crop built from `raw` | 31,965 |
+| `regular` | 105,572 |
+| `full` | 687,297 |
+
+The grid asks for `small`. A square crop would have made every tile a perfect square without
+cropping in the view, but it came back a third larger and slower, so it was dropped. The type that
+built it is kept in Architecture 3, marked deprecated with that reason in the message, so the
+decision is visible rather than lost. The detail screen asks for `full`, because that screen
+exists to be looked at and one large download is affordable when a tap precedes it.
+
+### Showing something immediately
+
+Every Unsplash photo ships a BlurHash, a short string encoding a tiny blurred version. It is
+decoded to 32 by 32 and shown under the image while the real one arrives, so a cell is never
+blank and never a grey box.
+
+Decoding is not free, so decoded images are held in an actor isolated cache capped at 600
+entries, evicting least recently used first. The first version emptied the whole cache on reaching
+the cap, which turned a scroll back up the feed into a decode storm. Evicting one entry at a time
+fixed that.
+
+### Not doing the same work twice
+
+* Two cells asking for the same URL share one download, and anything cached never hits the network
+  again. Kingfisher handles both.
+* Unsplash repeats photos across pages, so every loaded page is filtered against a set of IDs
+  already seen. Without that the grid grows duplicates and the scroll position drifts.
+* Prefetching warms only the URLs from the page just appended, not the whole list. Re-warming
+  everything on each page would get slower the further you scroll.
+* A download is cancelled when its cell leaves the screen, so the queue is never full of images
+  nobody will see.
+
+### Keeping the main thread free
+
+* Images are decompressed off the main thread. An undecoded JPEG is otherwise decoded the first
+  time it is drawn, mid scroll, which is a dropped frame.
+* `LazyVGrid` inside a `ScrollView` builds only the cells on screen.
+* Cell width is computed once from the parent width and rounded down, so three cells and two gaps
+  always fit and no row is laid out at a fractional width.
+
+### Paging
+
+Thirty photos a page, with the next page triggered fifteen from the end. Fifteen is roughly five
+rows of lead time, which is enough for a page to arrive before the user reaches the bottom at a
+normal scroll speed without loading pages nobody looks at.
+
+The trigger is a single photo ID held on the view model, compared on appear. The first version
+used the index of each cell, which meant every cell knew its position and the whole grid had to be
+re-evaluated when the list grew.
+
+### Avoiding unnecessary SwiftUI updates
+
+* The view models are `@Observable` rather than `ObservableObject`, so a view is invalidated by
+  the properties it actually reads instead of by any change at all.
+* The feed cell conforms to `Equatable`, so an identical cell is not re-rendered.
+* The feed view model is held by the root view, not by the `App`. Hoisting it into an `App` level
+  `@State` put it inside the root observation scope, so appending a page invalidated the entire
+  scene. It showed up as visible jitter mid scroll, and moving it back fixed it.
+
+Not finished. Both grid views still read the loading flag and the error state in the same body
+that renders the grid, so a spinner appearing re-evaluates the grid. Splitting those into child
+views is listed under Improvements.
+
+### Search
+
+Typing is debounced by 400 milliseconds with a two character minimum, and an in flight search is
+cancelled when a new one starts. A generation counter discards results that arrive after the query
+has moved on, which is what stopped a search for a prefix overwriting the results of the word
+finally typed.
+
+### Memory
+
+The image memory cache is capped at 100 MB rather than Kingfisher's default of a quarter of
+physical memory. Resident memory was watched across repeated scroll passes through several hundred
+photos during development and plateaued rather than climbing, which is the behaviour the cap and
+the blur hash eviction are both there to produce.
+
+Architecture 3 also tracks leaks in its tests, which is how the retain cycle in the search
+debouncer was found.
+
+### Not done
+
+Instruments has not been run as a formal pass. The measurements above come from the network, from
+`ps`, and from the leak tracking in tests. A proper pass would be Time Profiler during a scroll,
+Allocations and Leaks across several hundred images, and Animation Hitches on a device rather than
+the simulator, where the GPU is not representative.
 
 
 ## How to navigate
