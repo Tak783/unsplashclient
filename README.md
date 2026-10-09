@@ -146,41 +146,25 @@ tvOS and visionOS, and code in those layers must be supportable on all of them.
 * Room to open source a layer, to hire against it, or to stand up a demo app on top of it, since
   each layer depends on abstractions rather than concrete implementations.
 
-## Image loading
+## Perfomancce
 
-Images come from Unsplash over the network, three to a row, for hundreds of rows. Doing that by
-hand means writing a download queue, a memory cache, a disk cache, cancellation on cell reuse and
-decode off the main thread. All four matter for scrolling, and all four are easy to get subtly
-wrong, so the app uses [Kingfisher](https://github.com/onevcat/Kingfisher) 8.13.0 instead.
+The app is image heavy. 3 images per row. Hundreds of rows. Hand writing taht means adding
+a download queue, memory cache, disk cache, cache clearance, cancellation, re-ise managenement,
+mananing that all off the main thread. Kingfisher was chosen insgtead as it provides so much.
+Its well tested and I have used it on most companies I've worked at 
+
+[Kingfisher](https://github.com/onevcat/Kingfisher) 8.13.0
 
 ### Why Kingfisher
 
-* **It deduplicates work.** Two cells asking for the same URL share one download, and a URL
-  already in cache never hits the network again. That is the single biggest win in a grid where
-  Unsplash repeats photos across pages.
-* **It decodes off the main thread.** An undecoded JPEG is decompressed the first time it is
-  drawn, which lands on the main thread during a scroll and shows up as a dropped frame.
-* **It cancels.** A cell scrolled past stops downloading, so the queue is never clogged with
-  images nobody will see.
-* **It has a SwiftUI view.** `KFImage` fits the declarative grid, with a placeholder closure for
-  the blur hash, rather than wrapping `UIImageView`.
+* **It decodes off the main thread.** 
+* **It deduplicates work.** Two cells asking for the same URL share one download.
+* **It cancels.** If a cell is scrolled past stops downloading.
+* **It has a custom SwiftUI view.** `KFImage` fits the declarative grid, 
+with a placeholder closure for the blur hash, rather than wrapping `UIImageView`.
 * **It prefetches.** A page of newly loaded URLs can be warmed before the cells reach the screen.
 
-### How it is used
-
-| Where | What | Why |
-|---|---|---|
-| Feed cell and detail | `KFImage` | Loads the photo and shows the decoded blur hash underneath while it arrives |
-| Both | `.backgroundDecode()` | Decompresses off the main thread, so scrolling does not stall |
-| Feed cell | `.cancelOnDisappear(true)` | Drops the download when the cell leaves the screen |
-| Both | `.fade(duration:)` | A short cross fade from blur hash to photo, from the design system |
-| Grid | `ImagePrefetcher` | Warms only the URLs from the page just appended, not the whole list |
-
-The grid requests the `small` URL and the detail screen requests `full`, so the feed stays cheap
-and the full screen view is worth opening. A measurement decided that: the `small` image is about
-24 KB, while a custom square crop of the same photo came back at about 32 KB and took longer, so
-the custom crop was dropped from the grid. The type that built it is kept in Architecture 3, marked
-deprecated with the reason, rather than deleted, so the decision stays visible.
+We use it everywhere where there is an image.
 
 ### Cache size and clearing
 
@@ -210,46 +194,40 @@ those are wired to anything today, because the app has no settings screen.
 
 ## Choices, and what they cost
 
-The brief is graded on scrolling, responsiveness, loading states, behaviour after several hundred
-images, and avoiding duplicated or unnecessary work. These are the decisions made against that,
-and the reasoning behind each.
-
 ### Which image size to request
 
 Measured rather than guessed. For the same photo:
 
-| URL | Bytes |
-|---|---:|
-| `small` | 24,526 |
-| A square crop built from `raw` | 31,965 |
-| `regular` | 105,572 |
-| `full` | 687,297 |
+| URL                            |   Bytes |
+|--------------------------------|--------:|
+| `small`                        |  24,526 |
+| A square crop built from `raw` |  31,965 |
+| `regular`                      | 105,572 |
+| `full`                         | 687,297 |
 
-The grid asks for `small`. A square crop would have made every tile a perfect square without
-cropping in the view, but it came back a third larger and slower, so it was dropped. The type that
-built it is kept in Architecture 3, marked deprecated with that reason in the message, so the
-decision is visible rather than lost. The detail screen asks for `full`, because that screen
-exists to be looked at and one large download is affordable when a tap precedes it.
+The grid asks for `small`. A square crop (see `urlWhenResizedAsASquare`) would have made 
+every tile a perfect square without cropping in the view, but it came back a third larger and 
+slower, so I droppped it was dropped. 
 
-### Showing something immediately
+I did keep `urlWhenResizedAsASquare`) as a demo maybe to return to and optimise.
+But in the end, I turend the grid into rectangles instead of squares so.
 
-Every Unsplash photo ships a BlurHash, a short string encoding a tiny blurred version. It is
+### Blur
+
+Every Unsplash photo ships a BlurHash. This enables us to show a blur whilst it loads. It is
 decoded to 32 by 32 and shown under the image while the real one arrives, so a cell is never
 blank and never a grey box.
 
-Decoding is not free, so decoded images are held in an actor isolated cache capped at 600
-entries, evicting least recently used first. The first version emptied the whole cache on reaching
-the cap, which turned a scroll back up the feed into a decode storm. Evicting one entry at a time
-fixed that.
+But decoding is not free, it take compute, so decoded images are held in a cache capped at 600
+entries, evicting least recently used first. 
 
-### Not doing the same work twice
+### D.R.Y - Not doing the same work twice
 
 * Two cells asking for the same URL share one download, and anything cached never hits the network
   again. Kingfisher handles both.
 * Unsplash repeats photos across pages, so every loaded page is filtered against a set of IDs
   already seen. Without that the grid grows duplicates and the scroll position drifts.
-* Prefetching warms only the URLs from the page just appended, not the whole list. Re-warming
-  everything on each page would get slower the further you scroll.
+* Kingfisher Prefetching warms only the URLs from the page just appended, not the whole list.
 * A download is cancelled when its cell leaves the screen, so the queue is never full of images
   nobody will see.
 
