@@ -11,7 +11,6 @@ struct RemoteUnsplashPhotoImageURLsModel: Decodable {
     let full: URL?
     let regular: URL?
     let small: URL?
-    let thumb: URL?
 }
 
 // MARK: - To Local Model Helpers
@@ -20,8 +19,7 @@ extension RemoteUnsplashPhotoImageURLsModel {
         UnsplashPhotoImageURLsModel(
             full: full,
             regular: regular,
-            small: small,
-            thumb: thumb
+            small: small
         )
     }
 }
