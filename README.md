@@ -212,6 +212,8 @@ slower, so I droppped it was dropped.
 I did keep `urlWhenResizedAsASquare`) as a demo maybe to return to and optimise.
 But in the end, I turend the grid into rectangles instead of squares so.
 
+Kingfisher clears the image cache byitself which is good.
+
 ### Blur
 
 Every Unsplash photo ships a BlurHash. This enables us to show a blur whilst it loads. It is
@@ -223,7 +225,7 @@ entries, evicting least recently used first.
 
 ### D.R.Y - Not doing the same work twice
 
-* Two cells asking for the same URL share one download, and anything cached never hits the network
+* Two cells asking for the same URL share one download  and anything cached never hits the network
   again. Kingfisher handles both.
 * Unsplash repeats photos across pages, so every loaded page is filtered against a set of IDs
   already seen. Without that the grid grows duplicates and the scroll position drifts.
