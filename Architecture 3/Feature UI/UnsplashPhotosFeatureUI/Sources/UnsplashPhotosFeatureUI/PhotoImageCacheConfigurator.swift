@@ -13,6 +13,6 @@ public enum PhotoImageCacheConfigurator {
 
     public static func configure() {
         ImageCache.default.memoryStorage.config.totalCostLimit = memoryCacheLimitInBytes
-        safePrint("Image memory cache limit set to \(memoryCacheLimitInBytes) bytes")
+        safePrint("✅ Image memory cache limit set to \(memoryCacheLimitInBytes) bytes")
     }
 }

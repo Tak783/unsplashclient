@@ -5,8 +5,8 @@
 //  Created on 08/10/2026.
 //
 
-import Foundation
 import CoreNetworking
+import Foundation
 
 public nonisolated struct RemoteUnsplashPhotoImageURLsModel: Decodable {
     public let full: URL?

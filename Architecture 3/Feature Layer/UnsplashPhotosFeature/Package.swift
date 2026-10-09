@@ -15,6 +15,10 @@ let package = Package(
     ],
     dependencies: [
         .package(
+            name: "CoreSearch",
+            path: "../../Core Shared Components Layer/CoreSearch"
+        ),
+        .package(
             name: "CoreFoundational",
             path: "../../Foundation Layer/CoreFoundational"
         ),
@@ -24,13 +28,17 @@ let package = Package(
         ),
         .package(
             name: "CoreNetworking",
-            path: "../../Core Layer/CoreNetworking"
+            path: "../../Core Shared Components Layer/CoreNetworking"
         )
     ],
     targets: [
         .target(
             name: "UnsplashPhotosFeature",
             dependencies: [
+                .product(
+                    name: "CoreSearch",
+                    package: "CoreSearch"
+                ),
                 .product(
                     name: "CoreFoundational",
                     package: "CoreFoundational"

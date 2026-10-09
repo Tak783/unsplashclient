@@ -6,8 +6,9 @@
 //
 
 import CoreFoundational
-import Foundation
 import CoreNetworking
+import CoreSearch
+import Foundation
 
 @MainActor
 @Observable

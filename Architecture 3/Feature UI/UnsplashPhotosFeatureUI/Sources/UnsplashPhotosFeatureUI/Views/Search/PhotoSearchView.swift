@@ -6,8 +6,8 @@
 //
 
 import CoreFoundational
-import SwiftUI
 import CoreNetworking
+import SwiftUI
 import UnsplashPhotosFeature
 
 public struct PhotoSearchView: View {

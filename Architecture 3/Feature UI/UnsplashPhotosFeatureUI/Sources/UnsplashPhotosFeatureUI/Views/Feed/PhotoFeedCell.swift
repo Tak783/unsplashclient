@@ -5,13 +5,13 @@
 //  Created on 09/10/2026.
 //
 
+import CoreDesignSystem
+import CoreNetworking
 import Kingfisher
 import SwiftUI
-import CoreNetworking
 import UnsplashPhotosFeature
 
 public struct PhotoFeedCell: View {
-    private static let fadeInDurationInSeconds = 0.15
 
     public let cellWidth: CGFloat
     public let cellHeight: CGFloat
@@ -34,7 +34,7 @@ public extension PhotoFeedCell {
             .placeholder { BlurredImagePlaceholderView(blurHash: photo.blurHash) }
             .backgroundDecode()
             .cancelOnDisappear(true)
-            .fade(duration: Self.fadeInDurationInSeconds)
+            .fade(duration: DesignSystem.AnimationDuration.imageFadeInInSeconds)
             .resizable()
             .aspectRatio(contentMode: .fill)
             .frame(width: cellWidth, height: cellHeight)

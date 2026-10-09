@@ -15,6 +15,10 @@ let package = Package(
     ],
     dependencies: [
         .package(
+            name: "CoreDesignSystem",
+            path: "../../Core Design System Layer/CoreDesignSystem"
+        ),
+        .package(
             name: "CoreFoundational",
             path: "../../Foundation Layer/CoreFoundational"
         ),
@@ -24,7 +28,7 @@ let package = Package(
         ),
         .package(
             name: "CoreNetworking",
-            path: "../../Core Layer/CoreNetworking"
+            path: "../../Core Shared Components Layer/CoreNetworking"
         ),
         .package(
             name: "UnsplashPhotosFeature",
@@ -39,6 +43,10 @@ let package = Package(
         .target(
             name: "UnsplashPhotosFeatureUI",
             dependencies: [
+                .product(
+                    name: "CoreDesignSystem",
+                    package: "CoreDesignSystem"
+                ),
                 .product(
                     name: "CoreFoundational",
                     package: "CoreFoundational"

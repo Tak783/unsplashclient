@@ -5,10 +5,10 @@
 //  Created on 09/10/2026.
 //
 
+@testable import CoreNetworking
 import CoreTesting
 import Foundation
 import Testing
-@testable import CoreNetworking
 
 @Suite
 struct URLSessionHTTPClientUnitTests {}

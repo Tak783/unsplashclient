@@ -5,8 +5,8 @@
 //  Created on 08/10/2026.
 //
 
-import UIKit
 import CoreNetworking
+import UIKit
 import UnsplashPhotosFeature
 
 public nonisolated enum BlurHashDecoder {

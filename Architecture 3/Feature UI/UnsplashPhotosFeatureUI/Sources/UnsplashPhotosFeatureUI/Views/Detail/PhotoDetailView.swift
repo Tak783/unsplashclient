@@ -5,18 +5,13 @@
 //  Created on 09/10/2026.
 //
 
+import CoreDesignSystem
+import CoreNetworking
 import Kingfisher
 import SwiftUI
-import CoreNetworking
 import UnsplashPhotosFeature
 
 public struct PhotoDetailView: View {
-    private static let fadeInDurationInSeconds = 0.15
-    private static let closeButtonLeadingPadding: CGFloat = 16
-    private static let closeButtonSize: CGFloat = 36
-    private static let navigationBarHeight: CGFloat = 44
-    private static let closeButtonBackgroundOpacity = 0.35
-
     @Environment(\.dismiss) private var dismiss
 
     @State private var viewModel: PhotoDetailViewModel
@@ -37,7 +32,7 @@ public struct PhotoDetailView: View {
                 .ignoresSafeArea()
                 .overlay(alignment: .topLeading) {
                     closeButton
-                        .padding(.leading, Self.closeButtonLeadingPadding)
+                        .padding(.leading, DesignSystem.Spacing.small)
                         .padding(.top, Self.closeButtonTopPadding)
                 }
         }
@@ -56,7 +51,7 @@ public extension PhotoDetailView {
                     )
                 }
                 .backgroundDecode()
-                .fade(duration: Self.fadeInDurationInSeconds)
+                .fade(duration: DesignSystem.AnimationDuration.imageFadeInInSeconds)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(
@@ -80,9 +75,12 @@ public extension PhotoDetailView {
             Image(systemName: "xmark")
                 .font(.body.weight(.semibold))
                 .foregroundStyle(.white)
-                .frame(width: Self.closeButtonSize, height: Self.closeButtonSize)
+                .frame(
+                    width: DesignSystem.Size.closeButton,
+                    height: DesignSystem.Size.closeButton
+                )
                 .background(
-                    Circle().fill(.black.opacity(Self.closeButtonBackgroundOpacity))
+                    Circle().fill(.black.opacity(DesignSystem.Opacity.buttonBackground))
                 )
         }
     }
@@ -91,6 +89,6 @@ public extension PhotoDetailView {
 // MARK: - Layout
 public extension PhotoDetailView {
     private static var closeButtonTopPadding: CGFloat {
-        (navigationBarHeight - closeButtonSize) / 2
+        (DesignSystem.Size.navigationBar - DesignSystem.Size.closeButton) / 2
     }
 }

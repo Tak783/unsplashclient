@@ -5,8 +5,9 @@
 //  Created on 09/10/2026.
 //
 
-import SwiftUI
+import CoreDesignSystem
 import CoreNetworking
+import SwiftUI
 import UnsplashPhotosFeature
 
 public struct PhotoCaptionOverlay: View {
@@ -57,18 +58,18 @@ public extension PhotoCaptionOverlay {
         static let grid = Style(
             font: .caption2,
             lineLimit: 2,
-            horizontalPadding: 6,
-            bottomPadding: 6,
-            topPaddingForGradient: 30,
+            horizontalPadding: DesignSystem.Spacing.extraSmall,
+            bottomPadding: DesignSystem.Spacing.extraSmall,
+            topPaddingForGradient: DesignSystem.GradientHeight.short,
             respectsBottomSafeArea: false
         )
 
         static let fullScreen = Style(
             font: .subheadline,
             lineLimit: nil,
-            horizontalPadding: 20,
-            bottomPadding: 24,
-            topPaddingForGradient: 72,
+            horizontalPadding: DesignSystem.Spacing.medium,
+            bottomPadding: DesignSystem.Spacing.large,
+            topPaddingForGradient: DesignSystem.GradientHeight.tall,
             respectsBottomSafeArea: true
         )
     }
@@ -76,15 +77,12 @@ public extension PhotoCaptionOverlay {
 
 // MARK: - Background
 public extension PhotoCaptionOverlay {
-    private static let backgroundMidOpacity = 0.55
-    private static let backgroundBottomOpacity = 0.95
-
     private static var backgroundGradient: LinearGradient {
         LinearGradient(
             stops: [
                 .init(color: .clear, location: 0),
-                .init(color: .black.opacity(backgroundMidOpacity), location: 0.45),
-                .init(color: .black.opacity(backgroundBottomOpacity), location: 1)
+                .init(color: .black.opacity(DesignSystem.Opacity.gradientMiddle), location: 0.45),
+                .init(color: .black.opacity(DesignSystem.Opacity.gradientBottom), location: 1)
             ],
             startPoint: .top,
             endPoint: .bottom

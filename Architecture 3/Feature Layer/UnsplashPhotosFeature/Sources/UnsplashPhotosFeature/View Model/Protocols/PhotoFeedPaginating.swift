@@ -39,13 +39,13 @@ public extension PhotoFeedPaginating {
 
         do {
             let loadedPhotos = try await loadPhotos(forPageNumber: nextPageNumber)
-            safePrint("Loaded \(loadedPhotos.count) photos for page \(nextPageNumber)")
+            safePrint("✅ Loaded \(loadedPhotos.count) photos for page \(nextPageNumber)")
             hasMorePagesToLoad = !loadedPhotos.isEmpty
             nextPageNumber += 1
             appendPhotosNotSeenBefore(loadedPhotos)
         } catch {
             guard !CancellationCheck.isCancellation(error) else { return }
-            safePrint("Page \(nextPageNumber) failed: \(error.localizedDescription)")
+            safePrint("❌ Page \(nextPageNumber) failed: \(error.localizedDescription)")
             errorMessage = PhotosServiceErrorMessage.userFacingMessage(for: error)
             isShowingErrorAlert = true
         }

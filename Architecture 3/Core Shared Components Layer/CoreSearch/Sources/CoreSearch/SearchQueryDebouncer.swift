@@ -1,12 +1,11 @@
 //
 //  SearchQueryDebouncer.swift
-//  UnsplashClient
+//  CoreSearch
 //
 //  Created on 09/10/2026.
 //
 
 import Foundation
-import CoreNetworking
 
 @MainActor
 public final class SearchQueryDebouncer {
@@ -15,6 +14,8 @@ public final class SearchQueryDebouncer {
 
     private var pendingSearchTask: Task<Void, Never>?
     private var lastDispatchedQuery: String?
+
+    public init() {}
 }
 
 // MARK: - Query Changes

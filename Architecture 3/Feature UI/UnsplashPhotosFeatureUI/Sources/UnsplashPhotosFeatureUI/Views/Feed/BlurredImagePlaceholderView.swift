@@ -5,8 +5,9 @@
 //  Created on 08/10/2026.
 //
 
-import SwiftUI
+import CoreDesignSystem
 import CoreNetworking
+import SwiftUI
 import UnsplashPhotosFeature
 
 public struct BlurredImagePlaceholderView: View {
@@ -21,7 +22,7 @@ public struct BlurredImagePlaceholderView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
             } else {
-                Color.secondary.opacity(0.15)
+                Color.secondary.opacity(DesignSystem.Opacity.placeholderFill)
             }
         }
         .task(id: blurHash) {

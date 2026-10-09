@@ -5,8 +5,8 @@
 //  Created on 09/10/2026.
 //
 
-import Foundation
 import CoreNetworking
+import Foundation
 
 @MainActor
 @Observable

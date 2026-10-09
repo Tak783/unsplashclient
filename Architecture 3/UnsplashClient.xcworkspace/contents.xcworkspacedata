@@ -9,10 +9,20 @@
       </FileRef>
    </Group>
    <Group
-      location = "group:Core Layer"
-      name = "Core Layer">
+      location = "group:Core Design System Layer"
+      name = "Core Design System Layer">
+      <FileRef
+         location = "group:CoreDesignSystem">
+      </FileRef>
+   </Group>
+   <Group
+      location = "group:Core Shared Components Layer"
+      name = "Core Shared Components Layer">
       <FileRef
          location = "group:CoreNetworking">
+      </FileRef>
+      <FileRef
+         location = "group:CoreSearch">
       </FileRef>
    </Group>
    <Group
