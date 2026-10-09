@@ -35,7 +35,7 @@ extension PhotosRootView {
     @ViewBuilder
     private var content: some View {
         if isSearchPresented {
-            PhotosViewFactory.makePhotoSearchView()
+            PhotosViewFactory.makePhotoSearchView(isSearchPresented: $isSearchPresented)
         } else {
             PhotoFeedGridView(viewModel: feedViewModel)
         }

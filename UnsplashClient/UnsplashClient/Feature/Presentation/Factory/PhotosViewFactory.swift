@@ -12,9 +12,12 @@ enum PhotosViewFactory {
         PhotosRootView(feedViewModel: makePhotosFeedViewModel())
     }
 
-    static func makePhotoSearchView() -> some View {
+    static func makePhotoSearchView(
+        isSearchPresented: Binding<Bool>
+    ) -> some View {
         PhotoSearchView(
-            viewModel: makePhotoSearchViewModel()
+            viewModel: makePhotoSearchViewModel(),
+            isSearchPresented: isSearchPresented
         )
     }
 }

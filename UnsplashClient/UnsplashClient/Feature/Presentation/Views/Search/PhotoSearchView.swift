@@ -8,11 +8,17 @@
 import SwiftUI
 
 struct PhotoSearchView: View {
+    @Binding var isSearchPresented: Bool
+
     @State private var viewModel: PhotoSearchViewModel
     @Namespace private var photoZoomNamespace
 
-    init(viewModel: PhotoSearchViewModel) {
+    init(
+        viewModel: PhotoSearchViewModel,
+        isSearchPresented: Binding<Bool>
+    ) {
         _viewModel = State(initialValue: viewModel)
+        _isSearchPresented = isSearchPresented
     }
 
     var body: some View {
@@ -20,7 +26,7 @@ struct PhotoSearchView: View {
             .background(Color.black)
             .searchable(
                 text: $viewModel.searchQuery,
-                isPresented: .constant(true),
+                isPresented: $isSearchPresented,
                 placement: .toolbar,
                 prompt: "Search photos"
             )
