@@ -14,6 +14,10 @@ let package = Package(
         )
     ],
     targets: [
-        .target(name: "CoreSearch")
+        .target(name: "CoreSearch"),
+        .testTarget(
+            name: "CoreSearchTests",
+            dependencies: ["CoreSearch"]
+        )
     ]
 )

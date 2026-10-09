@@ -14,6 +14,10 @@ let package = Package(
         )
     ],
     targets: [
-        .target(name: "CoreDesignSystem")
+        .target(name: "CoreDesignSystem"),
+        .testTarget(
+            name: "CoreDesignSystemTests",
+            dependencies: ["CoreDesignSystem"]
+        )
     ]
 )

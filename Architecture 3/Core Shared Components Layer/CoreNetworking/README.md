@@ -1,0 +1,3 @@
+# CoreNetworking
+
+The networking layer.
