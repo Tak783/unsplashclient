@@ -34,4 +34,25 @@ extension RemotePhotosService: PhotosService {
         )
         return remotePhotos.toLocalModels()
     }
+
+    func searchPhotos(
+        query: String,
+        pageNumber: Int,
+        photosPerPage: Int
+    ) async throws -> [UnsplashPhotoModel] {
+        let urlRequest = try UnsplashURLPool.searchPhotosRequest(
+            query: query,
+            pageNumber: pageNumber,
+            photosPerPage: photosPerPage,
+            accessKey: apiKeyProvider.accessKey
+        )
+
+        let (responseData, httpResponse) = try await httpClient.performRequest(urlRequest)
+        try httpResponse.validateStatusCode(throwing: PhotosServiceError.self)
+
+        let searchResponse: RemoteUnsplashSearchPhotosResponseModel = try responseData.decodeJSON(
+            throwing: PhotosServiceError.self
+        )
+        return (searchResponse.results ?? []).toLocalModels()
+    }
 }

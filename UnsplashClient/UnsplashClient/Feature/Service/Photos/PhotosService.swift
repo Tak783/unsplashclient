@@ -7,4 +7,10 @@
 
 protocol PhotosService: Sendable {
     func loadPhotos(pageNumber: Int, photosPerPage: Int) async throws -> [UnsplashPhotoModel]
+
+    func searchPhotos(
+        query: String,
+        pageNumber: Int,
+        photosPerPage: Int
+    ) async throws -> [UnsplashPhotoModel]
 }

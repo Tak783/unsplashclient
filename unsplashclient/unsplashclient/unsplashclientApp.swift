@@ -10,28 +10,21 @@ import SwiftUI
 
 @main
 struct UnsplashClientApp: App {
-    private static let imageMemoryCacheLimitInBytes = 100 * 1024 * 1024
-
     init() {
-        ImageCache.default.memoryStorage.config.totalCostLimit = Self.imageMemoryCacheLimitInBytes
+        Self.configureImageMemoryCache()
     }
 
     var body: some Scene {
         WindowGroup {
-            PhotosFeedView(viewModel: Self.makePhotosFeedViewModel())
+            PhotosViewFactory.makePhotosRootView()
                 .preferredColorScheme(.dark)
         }
     }
+}
 
-    private static func makePhotosFeedViewModel() -> PhotosFeedViewModel {
-        let photosService = RemotePhotosService(
-            httpClient: URLSessionHTTPClient(),
-            apiKeyProvider: UnsplashAPIKeyProvider()
-        )
-        return PhotosFeedViewModel(
-            photosService: photosService,
-            gridLayoutModel: .init(),
-            paginationModel: .init()
-        )
+// MARK: - Image Cache
+extension UnsplashClientApp {
+    private static func configureImageMemoryCache() {
+        ImageCache.default.memoryStorage.config.totalCostLimit = 100 * 1024 * 1024
     }
 }

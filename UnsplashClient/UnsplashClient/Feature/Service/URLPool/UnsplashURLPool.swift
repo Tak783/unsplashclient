@@ -17,6 +17,7 @@ extension UnsplashURLPool {
 
     private enum Endpoint: String {
         case photos = "/photos"
+        case searchPhotos = "/search/photos"
     }
 }
 
@@ -32,6 +33,28 @@ extension UnsplashURLPool: UnsplashAPIURLPoolable {
             host: host,
             path: Endpoint.photos.rawValue,
             queryItems: [
+                URLQueryItem(name: "page", value: String(pageNumber)),
+                URLQueryItem(name: "per_page", value: String(photosPerPage))
+            ]
+        ) else {
+            throw URLPoolError.couldNotBuildURL
+        }
+
+        return authenticatedGetRequest(url: url, accessKey: accessKey)
+    }
+
+    static func searchPhotosRequest(
+        query: String,
+        pageNumber: Int,
+        photosPerPage: Int,
+        accessKey: String
+    ) throws -> URLRequest {
+        guard let url = URL.make(
+            scheme: scheme,
+            host: host,
+            path: Endpoint.searchPhotos.rawValue,
+            queryItems: [
+                URLQueryItem(name: "query", value: query),
                 URLQueryItem(name: "page", value: String(pageNumber)),
                 URLQueryItem(name: "per_page", value: String(photosPerPage))
             ]
