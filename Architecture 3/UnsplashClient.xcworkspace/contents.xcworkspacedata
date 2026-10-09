@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "group:Core Layer"
+      name = "Core Layer">
+      <FileRef
+         location = "group:CoreNetworking">
+      </FileRef>
+   </Group>
+   <Group
+      location = "group:Feature Layer"
+      name = "Feature Layer">
+      <FileRef
+         location = "group:UnsplashPhotosFeature">
+      </FileRef>
+   </Group>
+   <Group
+      location = "group:Feature UI"
+      name = "Feature UI">
+      <FileRef
+         location = "group:UnsplashPhotosFeatureUI">
+      </FileRef>
+   </Group>
+   <Group
+      location = "group:Presentation"
+      name = "Presentation">
+      <FileRef
+         location = "group:UnsplashClient/UnsplashClient.xcodeproj">
+      </FileRef>
+   </Group>
+</Workspace>

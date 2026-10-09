@@ -6,13 +6,16 @@
 //
 
 import SwiftUI
+import CoreNetworking
+import UnsplashPhotosFeature
 
-enum PhotosViewFactory {
-    static func makePhotosRootView() -> some View {
+@MainActor
+public enum PhotosViewFactory {
+    public static func makePhotosRootView() -> some View {
         PhotosRootView(feedViewModel: makePhotosFeedViewModel())
     }
 
-    static func makePhotoSearchView(
+    public static func makePhotoSearchView(
         isSearchPresented: Binding<Bool>
     ) -> some View {
         PhotoSearchView(
@@ -23,7 +26,7 @@ enum PhotosViewFactory {
 }
 
 // MARK: - View Models
-extension PhotosViewFactory {
+public extension PhotosViewFactory {
     private static func makePhotosFeedViewModel() -> PhotosFeedViewModel {
         PhotosFeedViewModel(
             photosService: makePhotosService(),
@@ -42,9 +45,9 @@ extension PhotosViewFactory {
 }
 
 // MARK: - Services
-extension PhotosViewFactory {
+public extension PhotosViewFactory {
     private static func makePhotosService() -> PhotosService {
-        UnsplashPhotosService(
+        RemotePhotosService(
             httpClient: URLSessionHTTPClient(),
             apiKeyProvider: UnsplashAPIKeyProvider()
         )

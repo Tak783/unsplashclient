@@ -6,23 +6,24 @@
 //
 
 import Foundation
+import CoreNetworking
 
 @available(
     *,
     deprecated,
     message: "Scheduled for removal. `urlWhenResizedAsASquare` was built to return a perfect square image for the grid. However the image turned out larger image than Unsplash's own `small` size, so it takes longer to load. Please use the urls i.e. `small` on UnsplashPhotoModel instead."
 )
-nonisolated struct UnsplashImageURL: Sendable, Equatable {
+public nonisolated struct UnsplashImageURL: Sendable, Equatable {
     private let sourceURL: URL
 
-    init(sourceURL: URL) {
+    public init(sourceURL: URL) {
         self.sourceURL = sourceURL
     }
 }
 
 // MARK: - Resizing
 @available(*, deprecated)
-nonisolated extension UnsplashImageURL {
+public nonisolated extension UnsplashImageURL {
     /// Returns URL for the Image as a square, unsplashes backend returns the image as a squaree
     /// - Parameters:
     ///   - cellWidthAndHeight: cellWidthAndHeight

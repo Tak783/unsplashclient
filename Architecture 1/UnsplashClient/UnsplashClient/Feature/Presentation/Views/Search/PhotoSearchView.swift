@@ -10,16 +10,8 @@ import SwiftUI
 struct PhotoSearchView: View {
     @Binding var isSearchPresented: Bool
 
-    @State private var viewModel: PhotoSearchViewModel
+    @State private var viewModel = PhotoSearchViewModel()
     @Namespace private var photoZoomNamespace
-
-    init(
-        viewModel: PhotoSearchViewModel,
-        isSearchPresented: Binding<Bool>
-    ) {
-        _viewModel = State(initialValue: viewModel)
-        _isSearchPresented = isSearchPresented
-    }
 
     var body: some View {
         resultsOrPlaceholder

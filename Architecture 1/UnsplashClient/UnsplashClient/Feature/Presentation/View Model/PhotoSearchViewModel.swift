@@ -10,8 +10,8 @@ import Foundation
 @MainActor
 @Observable
 final class PhotoSearchViewModel {
-    let gridLayoutModel: GridLayoutModel
-    let paginationModel: PaginationModel
+    let gridLayoutModel = GridLayoutModel()
+    let paginationModel = PaginationModel()
 
     var isShowingErrorAlert = false
     var photos = [UnsplashPhotoModel]()
@@ -32,18 +32,12 @@ final class PhotoSearchViewModel {
     private var activeQuery = String()
     private var searchGeneration = 0
 
-    private let photosService: PhotosService
-    private let searchQueryDebouncer = SearchQueryDebouncer()
+    private let photosService = UnsplashPhotosService(
+        httpClient: URLSessionHTTPClient(),
+        apiKeyProvider: UnsplashAPIKeyProvider()
+    )
 
-    init(
-        photosService: PhotosService,
-        gridLayoutModel: GridLayoutModel,
-        paginationModel: PaginationModel
-    ) {
-        self.photosService = photosService
-        self.gridLayoutModel = gridLayoutModel
-        self.paginationModel = paginationModel
-    }
+    private let searchQueryDebouncer = SearchQueryDebouncer()
 }
 
 // MARK: - PhotoFeedPaginating

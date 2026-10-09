@@ -16,7 +16,7 @@ struct UnsplashClientApp: App {
 
     var body: some Scene {
         WindowGroup {
-            PhotosViewFactory.makePhotosRootView()
+            PhotosRootView()
                 .preferredColorScheme(.dark)
         }
     }

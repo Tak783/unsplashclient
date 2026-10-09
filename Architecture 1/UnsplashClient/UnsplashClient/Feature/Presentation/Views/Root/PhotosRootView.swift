@@ -9,11 +9,7 @@ import SwiftUI
 
 struct PhotosRootView: View {
     @State private var isSearchPresented = false
-    @State private var feedViewModel: PhotosFeedViewModel
-
-    init(feedViewModel: PhotosFeedViewModel) {
-        _feedViewModel = State(initialValue: feedViewModel)
-    }
+    @State private var feedViewModel = PhotosFeedViewModel()
 
     var body: some View {
         NavigationStack {
@@ -35,7 +31,7 @@ extension PhotosRootView {
     @ViewBuilder
     private var content: some View {
         if isSearchPresented {
-            PhotosViewFactory.makePhotoSearchView(isSearchPresented: $isSearchPresented)
+            PhotoSearchView(isSearchPresented: $isSearchPresented)
         } else {
             PhotoFeedGridView(viewModel: feedViewModel)
         }

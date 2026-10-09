@@ -10,8 +10,8 @@ import Foundation
 @MainActor
 @Observable
 final class PhotosFeedViewModel {
-    let gridLayoutModel: GridLayoutModel
-    let paginationModel: PaginationModel
+    let gridLayoutModel = GridLayoutModel()
+    let paginationModel = PaginationModel()
 
     var isShowingErrorAlert = false
     var photos = [UnsplashPhotoModel]()
@@ -23,17 +23,10 @@ final class PhotosFeedViewModel {
     var isLoadingNextPage = false
     var errorMessage: String?
 
-    private let photosService: PhotosService
-
-    init(
-        photosService: PhotosService,
-        gridLayoutModel: GridLayoutModel,
-        paginationModel: PaginationModel
-    ) {
-        self.photosService = photosService
-        self.gridLayoutModel = gridLayoutModel
-        self.paginationModel = paginationModel
-    }
+    private let photosService = UnsplashPhotosService(
+        httpClient: URLSessionHTTPClient(),
+        apiKeyProvider: UnsplashAPIKeyProvider()
+    )
 }
 
 // MARK: - PhotoFeedPaginating

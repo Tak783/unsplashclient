@@ -35,9 +35,9 @@ extension SearchQueryDebouncer {
 
         guard query != lastDispatchedQuery else { return }
 
-        pendingSearchTask = Task {
+        pendingSearchTask = Task { [weak self] in
             try? await Task.sleep(for: .seconds(Self.typingPauseInSeconds))
-            guard !Task.isCancelled else { return }
+            guard !Task.isCancelled, let self else { return }
             lastDispatchedQuery = query
             await search(query)
         }
@@ -52,7 +52,8 @@ extension SearchQueryDebouncer {
         let query = Self.normalised(rawQuery)
         guard query.count >= Self.minimumQueryLength else { return }
 
-        pendingSearchTask = Task {
+        pendingSearchTask = Task { [weak self] in
+            guard let self else { return }
             lastDispatchedQuery = query
             await search(query)
         }
