@@ -5,7 +5,6 @@
 //  Created on 08/10/2026.
 //
 
-import CoreNetworking
 public nonisolated struct PaginationModel: Sendable {
     public let itemsPerPage: Int
     public let itemsFromEndThatTriggerNextPage: Int

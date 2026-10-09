@@ -5,7 +5,6 @@
 //  Created on 09/10/2026.
 //
 
-import CoreNetworking
 public nonisolated struct GridLayoutModel: Sendable {
     public let columnCount: Int
     public let spacingBetweenCells: Double

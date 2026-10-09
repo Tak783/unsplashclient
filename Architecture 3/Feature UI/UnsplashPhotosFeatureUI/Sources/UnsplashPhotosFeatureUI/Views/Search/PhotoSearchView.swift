@@ -6,7 +6,6 @@
 //
 
 import CoreFoundational
-import CoreNetworking
 import SwiftUI
 import UnsplashPhotosFeature
 
