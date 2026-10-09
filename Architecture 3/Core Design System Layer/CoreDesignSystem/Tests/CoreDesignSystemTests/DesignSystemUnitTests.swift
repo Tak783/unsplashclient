@@ -5,8 +5,8 @@
 //  Created on 09/10/2026.
 //
 
-import Testing
 @testable import CoreDesignSystem
+import Testing
 
 @Suite
 struct DesignSystemUnitTests {}

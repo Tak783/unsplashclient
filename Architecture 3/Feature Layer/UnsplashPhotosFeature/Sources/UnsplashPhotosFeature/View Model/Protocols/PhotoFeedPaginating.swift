@@ -6,7 +6,6 @@
 //
 
 import CoreFoundational
-import CoreNetworking
 @MainActor
 public protocol PhotoFeedPaginating: PhotoFeedPresenting {
     var paginationModel: PaginationModel { get }

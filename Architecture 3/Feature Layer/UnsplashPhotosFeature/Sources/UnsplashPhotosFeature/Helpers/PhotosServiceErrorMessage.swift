@@ -5,7 +5,6 @@
 //  Created on 09/10/2026.
 //
 
-import CoreNetworking
 public nonisolated enum PhotosServiceErrorMessage {
     public static func userFacingMessage(for error: Error) -> String {
         guard let photosServiceError = error as? PhotosServiceError else {

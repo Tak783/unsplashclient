@@ -5,7 +5,6 @@
 //  Created on 09/10/2026.
 //
 
-import CoreNetworking
 @MainActor
 public protocol PhotoFeedPresenting: AnyObject {
     var gridLayoutModel: GridLayoutModel { get }

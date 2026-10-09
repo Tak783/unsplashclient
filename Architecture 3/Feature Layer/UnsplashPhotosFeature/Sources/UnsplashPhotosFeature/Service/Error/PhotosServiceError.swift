@@ -4,8 +4,8 @@
 //
 //  Created on 08/10/2026.
 //
-
 import CoreNetworking
+
 public nonisolated enum PhotosServiceError: Error, Equatable {
     case unauthorized
     case rateLimitExceeded

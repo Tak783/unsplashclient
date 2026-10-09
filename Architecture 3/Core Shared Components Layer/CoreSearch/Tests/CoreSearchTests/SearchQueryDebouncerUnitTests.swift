@@ -5,9 +5,9 @@
 //  Created on 09/10/2026.
 //
 
+@testable import CoreSearch
 import Foundation
 import Testing
-@testable import CoreSearch
 
 @Suite
 @MainActor

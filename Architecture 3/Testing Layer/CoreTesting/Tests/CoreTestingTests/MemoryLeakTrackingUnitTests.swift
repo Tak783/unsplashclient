@@ -5,8 +5,8 @@
 //  Created on 09/10/2026.
 //
 
-import Testing
 @testable import CoreTesting
+import Testing
 
 private final class ObjectThatIsReleased {
     let identifier: String
