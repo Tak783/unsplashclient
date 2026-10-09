@@ -11,9 +11,38 @@
    <Group
       location = "group:Testing Layer"
       name = "Testing Layer">
-      <FileRef
-         location = "group:CoreTesting">
-      </FileRef>
+      <Group
+         location = "group:CoreTesting"
+         name = "CoreTesting">
+         <Group
+            location = "group:Tests"
+            name = "Tests">
+            <Group
+               location = "group:CoreTestingTests"
+               name = "CoreTestingTests">
+               <FileRef
+                  location = "group:CoreTestingTests.swift">
+               </FileRef>
+            </Group>
+         </Group>
+         <FileRef
+            location = "group:Package.swift">
+         </FileRef>
+         <Group
+            location = "group:Sources"
+            name = "Sources">
+            <Group
+               location = "group:CoreTesting"
+               name = "CoreTesting">
+               <FileRef
+                  location = "group:MemoryLeakTracking.swift">
+               </FileRef>
+            </Group>
+         </Group>
+         <FileRef
+            location = "group:.swiftpm">
+         </FileRef>
+      </Group>
    </Group>
    <Group
       location = "group:Core Shared Components Layer"
@@ -35,9 +64,35 @@
    <Group
       location = "group:Core Design System Layer"
       name = "Core Design System Layer">
-      <FileRef
-         location = "group:CoreDesignSystem">
-      </FileRef>
+      <Group
+         location = "group:CoreDesignSystem"
+         name = "CoreDesignSystem">
+         <Group
+            location = "group:Tests"
+            name = "Tests">
+            <Group
+               location = "group:CoreDesignSystemTests"
+               name = "CoreDesignSystemTests">
+               <FileRef
+                  location = "group:CoreDesignSystemTests.swift">
+               </FileRef>
+            </Group>
+         </Group>
+         <FileRef
+            location = "group:Package.swift">
+         </FileRef>
+         <Group
+            location = "group:Sources"
+            name = "Sources">
+            <Group
+               location = "group:CoreDesignSystem"
+               name = "CoreDesignSystem">
+               <FileRef
+                  location = "group:DesignSystem.swift">
+               </FileRef>
+            </Group>
+         </Group>
+      </Group>
    </Group>
    <Group
       location = "group:Feature UI"
