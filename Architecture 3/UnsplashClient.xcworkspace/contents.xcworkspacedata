@@ -9,11 +9,8 @@
       </FileRef>
    </Group>
    <Group
-      location = "group:Core Design System Layer"
-      name = "Core Design System Layer">
-      <FileRef
-         location = "group:CoreDesignSystem">
-      </FileRef>
+      location = "group:Testing Layer"
+      name = "Testing Layer">
    </Group>
    <Group
       location = "group:Core Shared Components Layer"
@@ -33,17 +30,14 @@
       </FileRef>
    </Group>
    <Group
+      location = "group:Core Design System Layer"
+      name = "Core Design System Layer">
+   </Group>
+   <Group
       location = "group:Feature UI"
       name = "Feature UI">
       <FileRef
          location = "group:UnsplashPhotosFeatureUI">
-      </FileRef>
-   </Group>
-   <Group
-      location = "group:Testing Layer"
-      name = "Testing Layer">
-      <FileRef
-         location = "group:CoreTesting">
       </FileRef>
    </Group>
    <Group
