@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension HTTPURLResponse {
+nonisolated extension HTTPURLResponse {
     private static let successfulStatusCodes = 200 ..< 300
 
     func validateStatusCode<Failure: HTTPStatusCodeError>(

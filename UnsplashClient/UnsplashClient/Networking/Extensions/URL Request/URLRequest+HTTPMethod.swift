@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension URLRequest {
+nonisolated extension URLRequest {
     enum HTTPMethod: String {
         case get = "GET"
     }

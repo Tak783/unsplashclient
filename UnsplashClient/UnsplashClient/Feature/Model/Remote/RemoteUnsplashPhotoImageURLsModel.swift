@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct RemoteUnsplashPhotoImageURLsModel: Decodable {
+nonisolated struct RemoteUnsplashPhotoImageURLsModel: Decodable {
     let full: URL?
     let regular: URL?
     let small: URL?
 }
 
 // MARK: - To Local Model Helpers
-extension RemoteUnsplashPhotoImageURLsModel {
+nonisolated extension RemoteUnsplashPhotoImageURLsModel {
     func toLocalModel() -> UnsplashPhotoImageURLsModel {
         UnsplashPhotoImageURLsModel(
             full: full,

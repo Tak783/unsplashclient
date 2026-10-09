@@ -79,7 +79,7 @@ extension PhotoSearchView {
             gridLayoutModel: viewModel.gridLayoutModel,
             photoZoomNamespace: photoZoomNamespace,
             route: { SearchPhotoRoute(photoID: $0.id) },
-            onPhotoDidAppear: { viewModel.photoDidAppear(atIndex: $0) },
+            onPhotoDidAppear: { viewModel.photoDidAppear(withID: $0) },
             onRefresh: nil
         )
     }

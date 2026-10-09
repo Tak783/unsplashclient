@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RemoteUnsplashPhotoModel: Decodable {
+nonisolated struct RemoteUnsplashPhotoModel: Decodable {
     let id: String
     let description: String?
     let altDescription: String?
@@ -16,7 +16,7 @@ struct RemoteUnsplashPhotoModel: Decodable {
 }
 
 // MARK: - To Local Model Helpers
-extension RemoteUnsplashPhotoModel {
+nonisolated extension RemoteUnsplashPhotoModel {
     func toLocalModel() -> UnsplashPhotoModel {
         UnsplashPhotoModel(
             id: id,
@@ -29,7 +29,7 @@ extension RemoteUnsplashPhotoModel {
 }
 
 // MARK: - To Local Model Array Helpers
-extension Array where Element == RemoteUnsplashPhotoModel {
+nonisolated extension Array where Element == RemoteUnsplashPhotoModel {
     func toLocalModels() -> [UnsplashPhotoModel] {
         map { $0.toLocalModel() }
     }

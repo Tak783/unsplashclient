@@ -5,7 +5,7 @@
 //  Created on 09/10/2026.
 //
 
-struct GridLayoutModel {
+nonisolated struct GridLayoutModel: Sendable {
     let columnCount: Int
     let spacingBetweenCells: Double
     let cellHeightAsMultipleOfWidth: Double

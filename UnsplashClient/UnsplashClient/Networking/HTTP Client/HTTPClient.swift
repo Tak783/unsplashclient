@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol HTTPClient: Sendable {
+nonisolated protocol HTTPClient: Sendable {
     func performRequest(_ urlRequest: URLRequest) async throws -> (Data, HTTPURLResponse)
 }

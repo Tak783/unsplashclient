@@ -5,6 +5,6 @@
 //  Created on 09/10/2026.
 //
 
-enum URLPoolError: Error, Equatable {
+nonisolated enum URLPoolError: Error, Equatable {
     case couldNotBuildURL
 }

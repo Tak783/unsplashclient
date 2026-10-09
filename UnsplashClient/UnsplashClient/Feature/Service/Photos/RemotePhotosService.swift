@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RemotePhotosService: Sendable {
+nonisolated struct RemotePhotosService: Sendable {
     private let httpClient: HTTPClient
     private let apiKeyProvider: APIKeyProviding
 
@@ -18,7 +18,7 @@ struct RemotePhotosService: Sendable {
 }
 
 // MARK: - PhotosService
-extension RemotePhotosService: PhotosService {
+nonisolated extension RemotePhotosService: PhotosService {
     func loadPhotos(pageNumber: Int, photosPerPage: Int) async throws -> [UnsplashPhotoModel] {
         let urlRequest = try UnsplashURLPool.photosFeedRequest(
             pageNumber: pageNumber,

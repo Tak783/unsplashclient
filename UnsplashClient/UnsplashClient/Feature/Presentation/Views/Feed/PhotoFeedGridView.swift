@@ -18,7 +18,7 @@ struct PhotoFeedGridView: View {
             gridLayoutModel: viewModel.gridLayoutModel,
             photoZoomNamespace: photoZoomNamespace,
             route: { FeedPhotoRoute(photoID: $0.id) },
-            onPhotoDidAppear: { viewModel.photoDidAppear(atIndex: $0) },
+            onPhotoDidAppear: { viewModel.photoDidAppear(withID: $0) },
             onRefresh: { await viewModel.refresh() }
         )
         .background(Color.black)

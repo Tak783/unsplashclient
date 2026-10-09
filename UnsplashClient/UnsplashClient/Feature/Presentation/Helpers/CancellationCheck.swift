@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum CancellationCheck {
+nonisolated enum CancellationCheck {
     static func isCancellation(_ error: Error) -> Bool {
         if error is CancellationError {
             return true

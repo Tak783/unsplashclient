@@ -5,7 +5,7 @@
 //  Created on 09/10/2026.
 //
 
-enum HTTPHeaderFieldName: String {
+nonisolated enum HTTPHeaderFieldName: String {
     case authorization = "Authorization"
     case acceptVersion = "Accept-Version"
 }

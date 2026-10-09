@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Data {
+nonisolated extension Data {
     func decodeJSON<Decoded: Decodable, Failure: DataDecodingError>(
         as decodedType: Decoded.Type = Decoded.self,
         throwing failureType: Failure.Type

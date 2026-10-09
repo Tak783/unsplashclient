@@ -35,12 +35,12 @@ extension LayoutModelInitialiserUnitTests: LayoutModelInitialiserUnitTestsSpec {
         #expect(sut.cellHeightAsMultipleOfWidth == 1)
     }
 
-    @Test("pagination defaults to the Unsplash maximum of thirty per page")
+    @Test("pagination defaults to thirty per page, triggering the next at fifteen from the end")
     func test_paginationModel_defaultsToThirtyPerPage() {
         let sut = PaginationModel()
 
         #expect(sut.itemsPerPage == 30)
-        #expect(sut.itemsFromEndThatTriggerNextPage == 30)
+        #expect(sut.itemsFromEndThatTriggerNextPage == 15)
     }
 
     @Test("pagination keeps values passed explicitly")

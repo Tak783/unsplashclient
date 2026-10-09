@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol UnsplashAPIURLPoolable {
+nonisolated protocol UnsplashAPIURLPoolable {
     static func photosFeedRequest(
         pageNumber: Int,
         photosPerPage: Int,

@@ -5,7 +5,7 @@
 //  Created on 09/10/2026.
 //
 
-enum URLScheme: String {
+nonisolated enum URLScheme: String {
     case https
     case http
 }

@@ -13,7 +13,7 @@ protocol PhotoFeedPresenting: AnyObject {
     var errorMessage: String? { get }
     var isShowingErrorAlert: Bool { get set }
 
-    func photoDidAppear(atIndex photoIndex: Int)
+    func photoDidAppear(withID photoID: String)
     func retryLoadingNextPage() async
     func dismissErrorMessage()
     func photo(withID photoID: String) -> UnsplashPhotoModel?

@@ -7,10 +7,10 @@
 
 import Foundation
 
-enum UnsplashURLPool {}
+nonisolated enum UnsplashURLPool {}
 
 // MARK: - URL Components
-extension UnsplashURLPool {
+nonisolated extension UnsplashURLPool {
     private static let scheme = URLScheme.https
     private static let host = "api.unsplash.com"
     private static let apiVersion = "v1"
@@ -22,7 +22,7 @@ extension UnsplashURLPool {
 }
 
 // MARK: - Requests
-extension UnsplashURLPool: UnsplashAPIURLPoolable {
+nonisolated extension UnsplashURLPool: UnsplashAPIURLPoolable {
     static func photosFeedRequest(
         pageNumber: Int,
         photosPerPage: Int,
@@ -67,7 +67,7 @@ extension UnsplashURLPool: UnsplashAPIURLPoolable {
 }
 
 // MARK: - Authenticated Requests
-extension UnsplashURLPool {
+nonisolated extension UnsplashURLPool {
     private static func authenticatedGetRequest(
         url: URL,
         accessKey: String

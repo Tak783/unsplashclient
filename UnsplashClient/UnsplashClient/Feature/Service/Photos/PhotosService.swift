@@ -5,7 +5,7 @@
 //  Created on 08/10/2026.
 //
 
-protocol PhotosService: Sendable {
+nonisolated protocol PhotosService: Sendable {
     func loadPhotos(pageNumber: Int, photosPerPage: Int) async throws -> [UnsplashPhotoModel]
 
     func searchPhotos(

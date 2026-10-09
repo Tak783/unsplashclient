@@ -5,6 +5,7 @@
 //  Created on 09/10/2026.
 //
 
+import Kingfisher
 import SwiftUI
 
 struct PhotoGridView<Route: Hashable>: View {
@@ -12,8 +13,10 @@ struct PhotoGridView<Route: Hashable>: View {
     let gridLayoutModel: GridLayoutModel
     let photoZoomNamespace: Namespace.ID
     let route: (PhotoFeedCellPresentationModel) -> Route
-    let onPhotoDidAppear: (Int) -> Void
+    let onPhotoDidAppear: (String) -> Void
     let onRefresh: (() async -> Void)?
+
+    @State private var numberOfPhotosAlreadyPrefetched = 0
 
     var body: some View {
         GeometryReader { geometryProxy in
@@ -24,10 +27,7 @@ struct PhotoGridView<Route: Hashable>: View {
                     columns: gridColumns(cellWidth: cellWidth),
                     spacing: gridLayoutModel.spacingBetweenCells
                 ) {
-                    ForEach(
-                        Array(photoCellPresentationModels.enumerated()),
-                        id: \.element.id
-                    ) { photoIndex, photo in
+                    ForEach(photoCellPresentationModels, id: \.id) { photo in
                         NavigationLink(value: route(photo)) {
                             PhotoFeedCell(
                                 cellWidth: cellWidth,
@@ -39,13 +39,36 @@ struct PhotoGridView<Route: Hashable>: View {
                         .buttonStyle(.plain)
                         .matchedTransitionSource(id: photo.id, in: photoZoomNamespace)
                         .onAppear {
-                            onPhotoDidAppear(photoIndex)
+                            onPhotoDidAppear(photo.id)
                         }
                     }
                 }
             }
             .refreshableIfAvailable(onRefresh)
         }
+        .onChange(of: photoCellPresentationModels.count, initial: true) { _, _ in
+            prefetchImagesForNewlyLoadedPhotos()
+        }
+    }
+}
+
+// MARK: - Prefetching
+extension PhotoGridView {
+    private func prefetchImagesForNewlyLoadedPhotos() {
+        guard photoCellPresentationModels.count > numberOfPhotosAlreadyPrefetched else {
+            numberOfPhotosAlreadyPrefetched = photoCellPresentationModels.count
+            return
+        }
+
+        let newlyLoadedPhotos = photoCellPresentationModels[
+            numberOfPhotosAlreadyPrefetched...
+        ]
+        numberOfPhotosAlreadyPrefetched = photoCellPresentationModels.count
+
+        let imageURLsToPrefetch = newlyLoadedPhotos.compactMap(\.imageURL)
+        guard !imageURLsToPrefetch.isEmpty else { return }
+
+        ImagePrefetcher(urls: imageURLsToPrefetch).start()
     }
 }
 

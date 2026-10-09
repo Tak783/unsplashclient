@@ -5,7 +5,7 @@
 //  Created on 08/10/2026.
 //
 
-enum PhotosServiceError: Error, Equatable {
+nonisolated enum PhotosServiceError: Error, Equatable {
     case unauthorized
     case rateLimitExceeded
     case serverFailure
@@ -14,7 +14,7 @@ enum PhotosServiceError: Error, Equatable {
 }
 
 // MARK: - HTTPStatusCodeError
-extension PhotosServiceError: HTTPStatusCodeError {
+nonisolated extension PhotosServiceError: HTTPStatusCodeError {
     init(statusCode: Int) {
         switch statusCode {
         case 401:
@@ -30,4 +30,4 @@ extension PhotosServiceError: HTTPStatusCodeError {
 }
 
 // MARK: - DataDecodingError
-extension PhotosServiceError: DataDecodingError {}
+nonisolated extension PhotosServiceError: DataDecodingError {}

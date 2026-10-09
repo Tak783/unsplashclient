@@ -5,7 +5,7 @@
 //  Created on 09/10/2026.
 //
 
-enum PhotosServiceErrorMessage {
+nonisolated enum PhotosServiceErrorMessage {
     static func userFacingMessage(for error: Error) -> String {
         guard let photosServiceError = error as? PhotosServiceError else {
             return "Something went wrong. Please try again."

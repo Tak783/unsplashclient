@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension URL {
+nonisolated extension URL {
     static func make(
         scheme: URLScheme,
         host: String,

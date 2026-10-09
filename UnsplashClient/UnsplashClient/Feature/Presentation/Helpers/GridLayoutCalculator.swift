@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum GridLayoutCalculator {
+nonisolated enum GridLayoutCalculator {
     static func cellWidth(
         forParentViewWidth parentViewWidth: CGFloat,
         columnCount: Int,

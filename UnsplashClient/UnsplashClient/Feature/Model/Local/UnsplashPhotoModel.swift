@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct UnsplashPhotoModel: Sendable, Equatable {
+nonisolated struct UnsplashPhotoModel: Sendable, Equatable {
     let id: String
     let description: String?
     let altDescription: String?

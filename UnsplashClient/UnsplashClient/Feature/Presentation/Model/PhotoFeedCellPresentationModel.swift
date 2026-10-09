@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PhotoFeedCellPresentationModel: Sendable, Equatable {
+nonisolated struct PhotoFeedCellPresentationModel: Sendable, Equatable {
     let id: String
     let caption: String
     let imageURL: URL?

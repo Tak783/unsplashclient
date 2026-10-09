@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum PhotoCaptionResolver {
+nonisolated enum PhotoCaptionResolver {
     private static let missingCaptionPlaceholder = "Untitled photo"
 
     static func caption(for photo: UnsplashPhotoModel) -> String {

@@ -19,6 +19,7 @@ final class PhotoFeedPaginatingStub: PhotoFeedPaginating {
     var alreadySeenPhotoIDs = Set<String>()
     var nextPageNumber = 1
     var hasMorePagesToLoad = true
+    var photoIDThatTriggersNextPage: String?
     var isLoadingNextPage = false
     var errorMessage: String?
 

@@ -12,7 +12,7 @@ import Foundation
     deprecated,
     message: "Scheduled for removal. `urlWhenResizedAsASquare` was built to return a perfect square image for the grid. However the image turned out larger image than Unsplash's own `small` size, so it takes longer to load. Please use the urls i.e. `small` on UnsplashPhotoModel instead."
 )
-struct UnsplashImageURL: Sendable, Equatable {
+nonisolated struct UnsplashImageURL: Sendable, Equatable {
     private let sourceURL: URL
 
     init(sourceURL: URL) {
@@ -22,7 +22,7 @@ struct UnsplashImageURL: Sendable, Equatable {
 
 // MARK: - Resizing
 @available(*, deprecated)
-extension UnsplashImageURL {
+nonisolated extension UnsplashImageURL {
     /// Returns URL for the Image as a square, unsplashes backend returns the image as a squaree
     /// - Parameters:
     ///   - cellWidthAndHeight: cellWidthAndHeight

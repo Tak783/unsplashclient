@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension URLRequest {
+nonisolated extension URLRequest {
     mutating func setValue(_ value: String, for headerFieldName: HTTPHeaderFieldName) {
         setValue(value, forHTTPHeaderField: headerFieldName.rawValue)
     }

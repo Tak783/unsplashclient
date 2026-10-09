@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class URLSessionHTTPClient: Sendable {
+nonisolated final class URLSessionHTTPClient: Sendable {
     private let urlSession: URLSession
 
     enum HTTPClientError: Error, Equatable {
@@ -20,7 +20,7 @@ final class URLSessionHTTPClient: Sendable {
 }
 
 // MARK: - HTTPClient
-extension URLSessionHTTPClient: HTTPClient {
+nonisolated extension URLSessionHTTPClient: HTTPClient {
     func performRequest(_ urlRequest: URLRequest) async throws -> (Data, HTTPURLResponse) {
         let (responseData, urlResponse) = try await urlSession.data(for: urlRequest)
         guard let httpResponse = urlResponse as? HTTPURLResponse else {

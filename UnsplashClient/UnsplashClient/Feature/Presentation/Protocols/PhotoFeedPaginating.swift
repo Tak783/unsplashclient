@@ -14,6 +14,7 @@ protocol PhotoFeedPaginating: PhotoFeedPresenting {
     var alreadySeenPhotoIDs: Set<String> { get set }
     var nextPageNumber: Int { get set }
     var hasMorePagesToLoad: Bool { get set }
+    var photoIDThatTriggersNextPage: String? { get set }
     var isLoadingNextPage: Bool { get set }
     var errorMessage: String? { get set }
 
@@ -52,8 +53,18 @@ extension PhotoFeedPaginating {
 
         photos.append(contentsOf: photosNotSeenBefore)
         photoCellPresentationModels.append(
-            contentsOf: photosNotSeenBefore.map(Self.makePresentationModel)
+            contentsOf: photosNotSeenBefore.map { Self.makePresentationModel(for: $0) }
         )
+        updatePhotoIDThatTriggersNextPage()
+    }
+
+    func updatePhotoIDThatTriggersNextPage() {
+        let triggerIndex =
+            photoCellPresentationModels.count - paginationModel.itemsFromEndThatTriggerNextPage
+
+        photoIDThatTriggersNextPage = photoCellPresentationModels.indices.contains(triggerIndex)
+            ? photoCellPresentationModels[triggerIndex].id
+            : photoCellPresentationModels.first?.id
     }
 
     func resetPaging() {
@@ -62,16 +73,15 @@ extension PhotoFeedPaginating {
         alreadySeenPhotoIDs.removeAll()
         photos.removeAll()
         photoCellPresentationModels.removeAll()
+        photoIDThatTriggersNextPage = nil
         errorMessage = nil
     }
 }
 
 // MARK: - View Events
 extension PhotoFeedPaginating {
-    func photoDidAppear(atIndex photoIndex: Int) {
-        let itemsFromEndThatTriggerNextPage = paginationModel.itemsFromEndThatTriggerNextPage
-        let indexThatTriggersNextPage = photos.count - itemsFromEndThatTriggerNextPage
-        guard photoIndex >= indexThatTriggersNextPage else { return }
+    func photoDidAppear(withID photoID: String) {
+        guard photoID == photoIDThatTriggersNextPage else { return }
 
         Task {
             await loadNextPage()
@@ -97,7 +107,7 @@ extension PhotoFeedPaginating {
 
 // MARK: - Presentation Model Factory
 extension PhotoFeedPaginating {
-    static func makePresentationModel(
+    nonisolated static func makePresentationModel(
         for photo: UnsplashPhotoModel
     ) -> PhotoFeedCellPresentationModel {
         PhotoFeedCellPresentationModel(

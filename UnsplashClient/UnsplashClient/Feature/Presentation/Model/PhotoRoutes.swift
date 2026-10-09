@@ -5,10 +5,10 @@
 //  Created on 09/10/2026.
 //
 
-struct FeedPhotoRoute: Hashable {
+nonisolated struct FeedPhotoRoute: Hashable {
     let photoID: String
 }
 
-struct SearchPhotoRoute: Hashable {
+nonisolated struct SearchPhotoRoute: Hashable {
     let photoID: String
 }
