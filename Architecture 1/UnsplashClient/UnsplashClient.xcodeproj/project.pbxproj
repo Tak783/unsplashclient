@@ -39,16 +39,6 @@
 			path = UnsplashClient;
 			sourceTree = "<group>";
 		};
-		B11C772B30781A9C00CE5092 /* UnsplashClientTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = UnsplashClientTests;
-			sourceTree = "<group>";
-		};
-		B11C773530781A9C00CE5092 /* UnsplashClientUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = UnsplashClientUITests;
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,8 +71,6 @@
 			isa = PBXGroup;
 			children = (
 				B11C771D30781A9900CE5092 /* UnsplashClient */,
-				B11C772B30781A9C00CE5092 /* UnsplashClientTests */,
-				B11C773530781A9C00CE5092 /* UnsplashClientUITests */,
 				B11C771C30781A9900CE5092 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -136,9 +124,6 @@
 			dependencies = (
 				B11C772A30781A9C00CE5092 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				B11C772B30781A9C00CE5092 /* UnsplashClientTests */,
-			);
 			name = UnsplashClientTests;
 			packageProductDependencies = (
 			);
@@ -158,9 +143,6 @@
 			);
 			dependencies = (
 				B11C773430781A9C00CE5092 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				B11C773530781A9C00CE5092 /* UnsplashClientUITests */,
 			);
 			name = UnsplashClientUITests;
 			packageProductDependencies = (

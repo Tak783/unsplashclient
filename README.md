@@ -28,6 +28,12 @@ Architecture 3 takes those same seams and makes them physical, so the compiler e
 | Memory leak tracking in tests                 |       🔴       |       🔴       |       🟢       |
 | Deprecated API kept to show the decision      |       🔴       |       🔴       |       🟢       |
 
+## How to use
+
+1. APIKey -> search for `place_unsplash_api_key_here` in any of the achitectures (Arch)
+1. Arch 1 & 2 -> open their Xcode projects anr run the app
+1. Arch 3 -> open the workspace and run the app from there or any of the pacckages
+
 ## Overview
 
 ### Architecture
@@ -41,7 +47,7 @@ Architecture 3 takes those same seams and makes them physical, so the compiler e
   `Presentation Layer`.
 * Layer dependencies run vertically. A package may import only from the layers below it.
 
-The diagram lives at `Architecture 3/architecture-diagram.html`. Open it in a browser.
+The diagram lives at the root folder in `architecture-diagram.html`. Open it in a browser (Chrome)
 
 ### Design and development
 
@@ -55,7 +61,6 @@ The diagram lives at `Architecture 3/architecture-diagram.html`. Open it in a br
 * Each test suite in Architecture 3 conforms to a spec protocol, so the list of behaviours a type
   promises can be read in one short file without wading through assertions.
 * More UI and integration tests could be added, as discussed under Improvements.
-
 
 ## Architectural decisions
 
@@ -164,33 +169,7 @@ Its well tested and I have used it on most companies I've worked at
 with a placeholder closure for the blur hash, rather than wrapping `UIImageView`.
 * **It prefetches.** A page of newly loaded URLs can be warmed before the cells reach the screen.
 
-We use it everywhere where there is an image.
-
-### Cache size and clearing
-
-Kingfisher caches in two places, and the app changes one of them.
-
-| | Default | This app |
-|---|---|---|
-| Memory cost limit | A quarter of physical memory | 100 MB |
-| Memory expiry | 300 seconds | unchanged |
-| Disk size limit | Unlimited | unchanged |
-| Disk expiry | 7 days | unchanged |
-
-A quarter of physical memory is a lot on a modern phone, and an image cache that large competes
-with everything else the app wants to hold. 100 MB is roughly a thousand grid thumbnails, far more
-than a scroll session needs, while leaving the rest of the device alone. It is set once at launch,
-in `PhotoImageCacheConfigurator`, which is the only place in the app that knows Kingfisher is the
-image loader.
-
-Clearing is mostly automatic. Kingfisher observes the system notifications and empties the memory
-cache on a memory warning, cleans expired disk entries when the app is backgrounded, and cleans
-them again on termination. Nothing in the app needs to do that by hand.
-
-To clear manually, for example behind a settings toggle, the calls are
-`ImageCache.default.clearMemoryCache()`, `clearDiskCache()` and `cleanExpiredDiskCache()`. None of
-those are wired to anything today, because the app has no settings screen.
-
+We use Kingfisher it everywhere where there is an image.
 
 ## Choices, and what they cost
 
@@ -205,33 +184,22 @@ Measured rather than guessed. For the same photo:
 | `regular`                      | 105,572 |
 | `full`                         | 687,297 |
 
-The grid asks for `small`. A square crop (see `urlWhenResizedAsASquare`) would have made 
+*  The grid asks for `small`. A square crop (see `urlWhenResizedAsASquare`) would have made 
 every tile a perfect square without cropping in the view, but it came back a third larger and 
-slower, so I droppped it was dropped. 
-
-I did keep `urlWhenResizedAsASquare`) as a demo maybe to return to and optimise.
+slower, so I droppped it. 
+*  I did keep `urlWhenResizedAsASquare`) as a demo maybe to return to and optimise.
 But in the end, I turend the grid into rectangles instead of squares so.
-
-Kingfisher clears the image cache byitself which is good.
+* Used Kingfisher also becuase it clears the image cache byitself which is good.
+* Used `backgroundDecode` on Kinfisher to increase display speed, did not see meaningful 
+difference in additional time and memory usage by it.
+* Kingfisher Prefetching warms only the URLs from the page just appended, not the whole list.
+* A download is cancelled when its cell leaves the screen `.cancelOnDisappear` 
 
 ### Blur
 
-Every Unsplash photo ships a BlurHash. This enables us to show a blur whilst it loads. It is
-decoded to 32 by 32 and shown under the image while the real one arrives, so a cell is never
-blank and never a grey box.
-
-But decoding is not free, it take compute, so decoded images are held in a cache capped at 600
-entries, evicting least recently used first. 
-
-### D.R.Y - Not doing the same work twice
-
-* Two cells asking for the same URL share one download  and anything cached never hits the network
-  again. Kingfisher handles both.
-* Unsplash repeats photos across pages, so every loaded page is filtered against a set of IDs
-  already seen. Without that the grid grows duplicates and the scroll position drifts.
-* Kingfisher Prefetching warms only the URLs from the page just appended, not the whole list.
-* A download is cancelled when its cell leaves the screen, so the queue is never full of images
-  nobody will see.
+Every Unsplash photo comes with a BlurHash. Used to show a blur whilst an image loads loads. 
+However Blur decoding takes compute, so decoded images are held in a cache capped at 600
+entries, evicting least recently used first (better UX).
 
 ### Keeping the main thread free
 
@@ -241,53 +209,30 @@ entries, evicting least recently used first.
 * Cell width is computed once from the parent width and rounded down, so three cells and two gaps
   always fit and no row is laid out at a fractional width.
 
-### Paging
+### Pagination
 
-Thirty photos a page, with the next page triggered fifteen from the end. Fifteen is roughly five
-rows of lead time, which is enough for a page to arrive before the user reaches the bottom at a
-normal scroll speed without loading pages nobody looks at.
-
-The trigger is a single photo ID held on the view model, compared on appear. The first version
-used the index of each cell, which meant every cell knew its position and the whole grid had to be
-re-evaluated when the list grew.
-
-### Avoiding unnecessary SwiftUI updates
-
-* The view models are `@Observable` rather than `ObservableObject`, so a view is invalidated by
-  the properties it actually reads instead of by any change at all.
-* The feed cell conforms to `Equatable`, so an identical cell is not re-rendered.
-* The feed view model is held by the root view, not by the `App`. Hoisting it into an `App` level
-  `@State` put it inside the root observation scope, so appending a page invalidated the entire
-  scene. It showed up as visible jitter mid scroll, and moving it back fixed it.
-
-Not finished. Both grid views still read the loading flag and the error state in the same body
-that renders the grid, so a spinner appearing re-evaluates the grid. Splitting those into child
-views is listed under Improvements.
+* We show thirty photos a page 
+* Next page load triggered fifteen from the end.
+* From testing fiteen from testing is enough time to load the next set before 
+    a user gets to the bottom in normal scroll behavior. This also helps us manage rate limit.
 
 ### Search
+Core in philosphy was rate limit + memeory managemnt, so it adapts to typical user typing patterns
 
-Typing is debounced by 400 milliseconds with a two character minimum, and an in flight search is
-cancelled when a new one starts. A generation counter discards results that arrive after the query
-has moved on, which is what stopped a search for a prefix overwriting the results of the word
-finally typed.
+* Typing is debounced by 400 ms (we only send the request after tha time
+* We have a 2 character minimum for making a reqest 
+* Request are cancelled when a new one starts - this stops unnessary data fethcing + memor usage
 
 ### Memory
 
-The image memory cache is capped at 100 MB rather than Kingfisher's default of a quarter of
-physical memory. Resident memory was watched across repeated scroll passes through several hundred
-photos during development and plateaued rather than climbing, which is the behaviour the cap and
-the blur hash eviction are both there to produce.
+The image memory cache is capped at 100 MB `memoryCacheLimitInBytes` rather than Kingfisher's default
+of a quarter of physical memory to not annoy users. Downside is, more requests. 
+But IRL, this is a business level decision.
 
-Architecture 3 also tracks leaks in its tests, which is how the retain cycle in the search
+### Memory Leaks
+
+Architecture 3 also tracks memory leaks in its tests, which is how the retain cycle in the search
 debouncer was found.
-
-### Not done
-
-Instruments has not been run as a formal pass. The measurements above come from the network, from
-`ps`, and from the leak tracking in tests. A proper pass would be Time Profiler during a scroll,
-Allocations and Leaks across several hundred images, and Animation Hitches on a device rather than
-the simulator, where the GPU is not representative.
-
 
 ## How to navigate
 
@@ -299,35 +244,25 @@ the simulator, where the GPU is not representative.
 
 Every package in Architecture 3 builds and tests on its own, without building the app.
 
-## How to use
-
-APIKey -> search for `place_unsplash_api_key_here` and replce that string with your key
-
-## Key Decicions
-1. 
-
 ## Improvements
 
 There are optimisations and improvements to be made across all three architectures, open to
 discussion, but these are the core changes I would make next.
 
+*Priority*
+* 🚨 the load times on the detail page - the spec did not require load times of detail page to be 
+" smooth, without stuttering or noticeable loading times" as the "1. Main Feed" does. So I did not 
+add any optimisation. In future, I'd optimise it.
+* 🚨 Profiling with Instruments: Time Profiler for the scroll, Allocations and Leaks across 
+all feaatures.
 * Take the Unsplash access key out of the app. It is a constant today, which is wrong for anything
   real. The call belongs behind a backend that holds the key.
+
+*Others*
+
+* Add SwiftLint, with the rules enforced in CI rather than by review.
 * Add UI tests for the feed, the detail screen and search.
 * Add snapshot tests for the grid cell and the caption overlay.
-* Move the test doubles out of the feature test target into a `CoreMockData` package, so other
-  packages and apps can reuse them.
-* Move navigation into a `CoreNavigation` package. The typed routes sit in the feature package
-  today, which is fine for one app and not for several.
 * Move reusable SwiftUI components, such as the caption overlay and the blurred placeholder, into
   a `CoreSwiftUIComponents` package.
-* Cut the unnecessary SwiftUI view updates. Both grid views read the loading flag and the error
-  state in the same body that renders the grid, so a spinner appearing re-evaluates the whole
-  grid. Splitting those into child views would stop it.
-* Inject the URL pool instead of calling `UnsplashURLPool` statically from the service, which is
-  the last place a concrete type is reached for rather than passed in.
-* Remove the dead `CoreNetworking` imports from the feature UI package, left over from the split.
-* Profile with Instruments: Time Profiler for the scroll, Allocations and Leaks across several
-  hundred images, and Animation Hitches on a device rather than the simulator.
 * Add the usual things: localisation, accessibility and Dynamic Type.
-* Add SwiftLint, with the rules enforced in CI rather than by review.
