@@ -16,20 +16,21 @@ struct PhotosFeedView: View {
 
     var body: some View {
         GeometryReader { geometryProxy in
-            let cellWidthAndHeight = cellWidthAndHeight(
+            let cellWidth = cellWidth(
                 forParentViewWidth: geometryProxy.size.width
             )
             ScrollView {
                 LazyVGrid(
-                    columns: gridColumns(cellWidthAndHeight: cellWidthAndHeight),
+                    columns: gridColumns(cellWidth: cellWidth),
                     spacing: viewModel.gridLayoutModel.spacingBetweenCells
                 ) {
                     ForEach(
-                        Array(viewModel.photos.enumerated()),
+                        Array(viewModel.photoCellPresentationModels.enumerated()),
                         id: \.element.id
                     ) { photoIndex, photo in
                         PhotoFeedCell(
-                            cellWidthAndHeight: cellWidthAndHeight,
+                            cellWidth: cellWidth,
+                            cellHeight: cellHeight(forCellWidth: cellWidth),
                             photo: photo
                         )
                         .equatable()
@@ -39,10 +40,12 @@ struct PhotosFeedView: View {
                     }
                 }
             }
+            .background(Color.black)
             .refreshable {
                 await viewModel.refresh()
             }
         }
+        .background(Color.black)
         .task {
             await viewModel.loadFirstPageIfNeeded()
         }
@@ -66,17 +69,24 @@ struct PhotosFeedView: View {
 
 // MARK: - Grid Appearance Helpers
 extension PhotosFeedView {
-    func cellWidthAndHeight(forParentViewWidth width: CGFloat) -> CGFloat {
-        GridLayoutCalculator.cellWidthAndHeight(
+    func cellWidth(forParentViewWidth width: CGFloat) -> CGFloat {
+        GridLayoutCalculator.cellWidth(
             forParentViewWidth: width,
             columnCount: viewModel.gridLayoutModel.columnCount,
             spacingBetweenCells: viewModel.gridLayoutModel.spacingBetweenCells
         )
     }
 
-    func gridColumns(cellWidthAndHeight: CGFloat) -> [GridItem] {
+    func cellHeight(forCellWidth cellWidth: CGFloat) -> CGFloat {
+        GridLayoutCalculator.cellHeight(
+            forCellWidth: cellWidth,
+            cellHeightAsMultipleOfWidth: viewModel.gridLayoutModel.cellHeightAsMultipleOfWidth
+        )
+    }
+
+    func gridColumns(cellWidth: CGFloat) -> [GridItem] {
         GridLayoutCalculator.gridColumns(
-            cellWidthAndHeight: cellWidthAndHeight,
+            cellWidth: cellWidth,
             columnCount: viewModel.gridLayoutModel.columnCount,
             spacingBetweenCells: viewModel.gridLayoutModel.spacingBetweenCells
         )

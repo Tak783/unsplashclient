@@ -18,11 +18,12 @@ final class PhotosFeedViewModel {
     private var nextPageNumber = 1
     private var hasMorePagesToLoad = true
     private var alreadySeenPhotoIDs = Set<String>()
+    private var photos = [UnsplashPhotoModel]()
     private let photosService: PhotosService
 
     private(set) var isLoadingNextPage = false
     private(set) var errorMessage: String?
-    private(set) var photos: [UnsplashPhotoModel] = []
+    private(set) var photoCellPresentationModels = [PhotoFeedCellPresentationModel]()
 
     init(
         photosService: PhotosService,
@@ -57,6 +58,7 @@ extension PhotosFeedViewModel {
         hasMorePagesToLoad = true
         alreadySeenPhotoIDs.removeAll()
         photos.removeAll()
+        photoCellPresentationModels.removeAll()
         errorMessage = nil
         await loadNextPage()
     }
@@ -86,7 +88,8 @@ extension PhotosFeedViewModel {
     }
 
     private func reloadFeedIfNeeded(lastPhotoIndexSeen: Int) {
-        let indexThatTriggersNextPage = photos.count - paginationModel.itemsFromEndThatTriggerNextPage
+        let itemsFromEndThatTriggerNextPage = paginationModel.itemsFromEndThatTriggerNextPage
+        let indexThatTriggersNextPage = photos.count - itemsFromEndThatTriggerNextPage
         let feedNeedsToReload = lastPhotoIndexSeen >= indexThatTriggersNextPage
         guard feedNeedsToReload else { return }
         Task {
@@ -100,6 +103,31 @@ extension PhotosFeedViewModel {
         }
         guard !photosNotSeenBefore.isEmpty else { return }
         photos.append(contentsOf: photosNotSeenBefore)
+        photoCellPresentationModels.append(
+            contentsOf: photosNotSeenBefore.map(makePresentationModel)
+        )
+    }
+}
+
+// MARK: - Presentation Mapping
+extension PhotosFeedViewModel {
+    private static let missingCaptionPlaceholder = "Untitled photo"
+
+    private func makePresentationModel(
+        for photo: UnsplashPhotoModel
+    ) -> PhotoFeedCellPresentationModel {
+        PhotoFeedCellPresentationModel(
+            id: photo.id,
+            caption: caption(for: photo),
+            imageURL: photo.urls?.small,
+            blurHash: photo.blurHash
+        )
+    }
+
+    private func caption(for photo: UnsplashPhotoModel) -> String {
+        [photo.altDescription, photo.description]
+            .compactMap { $0?.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .first { !$0.isEmpty } ?? Self.missingCaptionPlaceholder
     }
 }
 

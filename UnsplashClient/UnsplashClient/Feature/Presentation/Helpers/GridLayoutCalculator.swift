@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum GridLayoutCalculator {
-    static func cellWidthAndHeight(
+    static func cellWidth(
         forParentViewWidth parentViewWidth: CGFloat,
         columnCount: Int,
         spacingBetweenCells: CGFloat
@@ -25,14 +25,21 @@ enum GridLayoutCalculator {
         return (widthAvailableForCells / CGFloat(columnCount)).rounded(.down)
     }
 
+    static func cellHeight(
+        forCellWidth cellWidth: CGFloat,
+        cellHeightAsMultipleOfWidth: CGFloat
+    ) -> CGFloat {
+        (cellWidth * cellHeightAsMultipleOfWidth).rounded(.down)
+    }
+
     static func gridColumns(
-        cellWidthAndHeight: CGFloat,
+        cellWidth: CGFloat,
         columnCount: Int,
         spacingBetweenCells: CGFloat
     ) -> [GridItem] {
         Array(
             repeating: GridItem(
-                .fixed(cellWidthAndHeight),
+                .fixed(cellWidth),
                 spacing: spacingBetweenCells
             ),
             count: columnCount
