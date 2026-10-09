@@ -11,6 +11,9 @@
    <Group
       location = "group:Testing Layer"
       name = "Testing Layer">
+      <FileRef
+         location = "group:CoreTesting">
+      </FileRef>
    </Group>
    <Group
       location = "group:Core Shared Components Layer"
@@ -32,6 +35,9 @@
    <Group
       location = "group:Core Design System Layer"
       name = "Core Design System Layer">
+      <FileRef
+         location = "group:CoreDesignSystem">
+      </FileRef>
    </Group>
    <Group
       location = "group:Feature UI"
